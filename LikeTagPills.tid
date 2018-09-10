@@ -1,0 +1,113 @@
+tags: Templates
+title: $:/plugins/OokTech/GenTags/LikeTagPills
+
+\define tag-styles()
+background-color:$(backgroundColor)$;
+fill:$(foregroundColor)$;
+color:$(foregroundColor)$;
+\end
+
+\define tag-body-inner(colour,fallbackTarget,colourA,colourB)
+<$set
+    name="foregroundColor"
+    value=<<contrastcolour
+        target:"""$colour$"""
+        fallbackTarget:"""$fallbackTarget$"""
+        colourA:"""$colourA$"""
+        colourB:"""$colourB$""">>
+>
+    <$set
+        name="backgroundColor"
+        value="""$colour$"""
+    >
+        <$button
+            popup=<<qualify "$:/state/popup/tag">>
+            class="tc-btn-invisible tc-tag-label"
+            style=<<tag-styles>>
+        >
+            <$transclude
+                tiddler={{!!icon}}
+            />
+            <$list
+                filter='[<WikifyTags>prefix[True]]'
+                variable=dummy
+                emptyMessage="""<$view field="title" format="text"/>"""
+            >
+                {{!!title}}
+            </$list>
+        </$button>
+        <$reveal
+            state=<<qualify "$:/state/popup/tag">>
+            type="popup"
+            position="below"
+            animate="yes"
+        >
+            <div
+                class="tc-drop-down"
+            >
+                <$list
+                    filter='[<WikifyTags>prefix[True]]'
+                    variable=dummy
+                    emptyMessage="""<$transclude tiddler="$:/core/ui/ListItemTemplate"/>"""
+                >
+                    {{!!title}}
+                </$list><$reveal
+                  type='match'
+                  state='$:/settings/GenTags/ShowOpenAll'
+                  text=true
+                >
+                  <$button
+                    class='tc-btn-invisible'
+                    tooltip='Open All Tagged Tiddlers'
+                  >
+                    {{$:/core/images/tag-button}}
+                    <$list
+                      filter='[all[current]listed<TheField>]'
+                    >
+                      <$action-navigate
+                        $to=<<currentTiddler>>
+                        $scroll='no'
+                      />
+                    </$list>
+                  </$button>
+                </$reveal>
+                <hr>
+                <$list
+                    filter="[all[current]listed<TheField>]"
+                    template="$:/core/ui/ListItemTemplate"
+                />
+            </div>
+        </$reveal>
+    </$set>
+</$set>
+\end
+
+\define tag-body(colour,palette)
+<span class="tc-tag-list-item">
+    <$set
+        name=TagBackground
+        filter='[[$:/settings/AlternateTagFields/$(TheField)$]get[color]]'
+        emptyValue={{$palette$##tag-background}}
+    >
+        <$set
+            name=Color
+            filter='[is[current]get[color]]'
+            emptyValue=<<TagBackground>>
+        >
+            <$macrocall
+                $name="tag-body-inner"
+                colour=<<Color>>
+                fallbackTarget=<<TagBackground>>
+                colourA={{$palette$##foreground}}
+                colourB={{$palette$##background}}
+            />
+        </$set>
+    </$set>
+</span>
+\end
+
+<$macrocall
+    $name="tag-body"
+    colour={{!!color}}
+    palette={{$:/palette}}
+/>

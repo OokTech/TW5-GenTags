@@ -1,0 +1,31 @@
+list-after: $:/core/ui/ViewTemplate/tags
+tags: $:/tags/ViewTemplate
+title: $:/plugins/OokTech/GenTags/template/ViewTemplate/OtherTagFieldsViewTemplate
+
+<$list
+    filter='[prefix[$:/settings/AlternateTagFields/]!hide_in_view_mode[true]]'
+    variable=FieldInfo
+>
+    <$set
+        name=WikifyTags
+        filter='[<FieldInfo>get[wikify]]'
+    >
+        <$set
+            name=FieldName
+            filter='[<FieldInfo>get[fieldname]]'
+        >
+            <$set
+                name=FieldLabel
+                filter='[<FieldInfo>get[label]]'
+            >
+                <$macrocall
+                    $name=TagLikeList
+                    fieldName=<<FieldName>>
+                    label=<<FieldLabel>>
+                    showEmpty=False
+                    wikify=<<WikifyTags>>
+                />
+            </$set>
+        </$set>
+    </$set>
+</$list>

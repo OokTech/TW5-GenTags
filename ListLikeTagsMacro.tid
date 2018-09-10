@@ -1,0 +1,211 @@
+tags: $:/tags/Macro
+title: $:/plugins/OokTech/GenTags/ListLikeTagsMacro
+
+\define lingo-base() $:/language/EditTemplate/
+\define tag-styles()
+background-color:$(backgroundColor)$;
+\end
+\define TagLikeList(fieldName label showEmpty:"" wikify:"False")
+<div>
+    <$set
+        name=WikifyTags
+        value="""$wikify$"""
+    >
+        <$list
+            filter='[list[!!$fieldName$]] [[$showEmpty$]prefix[True]] +[limit[1]]'
+        >
+            $label$:
+        </$list>
+        <$set
+            name=TheField
+            value='$fieldName$'
+        >
+            <$list
+                filter='[list[!!$fieldName$]]'
+            >
+                {{||$:/plugins/OokTech/GenTags/LikeTagPills}}
+            </$list>
+        </$set>
+    </$set>
+</div>
+\end
+
+\define EditTagLikeList(fieldName label wikify:"False")
+<div
+    class="tc-edit-tags"
+>
+    <$set
+        name=SettingsTiddler
+        filter="[[$fieldName$]addprefix[$:/settings/AlternateTagFields/]]"
+    >
+        <$set
+            name=ContainingTiddler
+            value={{!!title}}
+        >
+            <$set
+                name=WikifyTags
+                value="""$wikify$"""
+            >
+                $label$:
+                <$set
+                    name=TempTiddlerName
+                    filter="[[$fieldName$]addprefix[$:/temp/NewTagName/]]"
+                >
+                    <$set
+                        name=TempPopupState
+                        filter="[[$fieldName$]addprefix[$:/state/popup/tags-auto-complete/]]"
+                    >
+                        <$set
+                            name=DefaultBackgroundColor
+                            filter="[<SettingsTiddler>get[color]]"
+                        >
+                            <$list
+                                filter="[list[!!$fieldName$]sort[title]]"
+                                storyview="pop"
+                                variable=CurrentItem
+                            >
+                                <$set
+                                    name="backgroundColor"
+                                    filter="[<CurrentItem>get[color]]"
+                                    emptyValue=<<DefaultBackgroundColor>>
+                                >
+                                    <span
+                                        style=<<tag-styles>>
+                                        class="tc-tag-label"
+                                    >
+                                        <$list
+                                            filter="""[<WikifyTags>prefix[True]]"""
+                                            emptyMessage="""<$text text=<<CurrentItem>>/>"""
+                                        >
+                                            <<CurrentItem>>
+                                        </$list>
+                                        <$button
+                                            class="tc-btn-invisible tc-remove-tag-button"
+                                        >
+                                            &times;
+                                            <$action-listops
+                                                $tiddler=<<currentTiddler>>
+                                                $field="""$fieldName$"""
+                                                $subfilter='-[<CurrentItem>]'
+                                            />
+                                        </$button>
+                                    </span>
+                                </$set>
+                            </$list>
+
+                            <div class="tc-edit-add-tag">
+                                <span class="tc-add-tag-name">
+                                    <$edit-text
+                                        tiddler=<<TempTiddlerName>>
+                                        tag="input"
+                                        default=""
+                                        placeholder={{$:/language/EditTemplate/Tags/Add/Placeholder}}
+                                        focusPopup=<<TempPopupState>>
+                                        class="tc-edit-texteditor tc-popup-handle"
+                                    />
+                                </span>
+                                <$button
+                                    popup=<<TempPopupState>>
+                                    class="tc-btn-invisible tc-btn-dropdown"
+                                    tooltip={{$:/language/EditTemplate/Tags/Dropdown/Hint}}
+                                    aria-label={{$:/language/EditTemplate/Tags/Dropdown/Caption}}
+                                >
+                                    {{$:/core/images/down-arrow}}
+                                </$button>
+                                <span
+                                    class="tc-add-tag-button"
+                                >
+                                    <$set
+                                        name=NewValue
+                                        filter='[<TempTiddlerName>get[text]]'
+                                    >
+                                        <$button
+                                            set=<<TempTiddlerName>>
+                                            setTo=""
+                                            class=""
+                                        >
+                                            <$action-listops
+                                                $field="""$fieldName$"""
+                                                $subfilter=<<NewValue>>
+                                            />
+                                            <<lingo Tags/Add/Button>>
+                                        </$button>
+                                    </$set>
+                                </span>
+                            </div>
+                            <div
+                                class="tc-block-dropdown-wrapper"
+                            >
+                                <$reveal
+                                    state=<<TempPopupState>>
+                                    type="nomatch"
+                                    text=""
+                                    default=""
+                                >
+                                    <div
+                                        class="tc-block-dropdown"
+                                    >
+                                        <$list
+                                            filter="""[tags:$fieldName$[]]"""
+                                        >
+                                            <$button
+                                                set=<<TempTiddlerName>>
+                                                setTo=""
+                                                class="tc-btn-invisible"
+                                            >
+                                                {{||$:/core/ui/Components/tag-link}}
+                                                <$action-listops
+                                                    $tiddler=<<ContainingTiddler>>
+                                                    $field="""$fieldName$"""
+                                                    $subfilter='[<currentTiddler>]'
+                                                />
+                                            </$button>
+                                            <br>
+                                        </$list>
+                                    </div>
+                                </$reveal>
+                            </div>
+                        </$set>
+                    </$set>
+                </$set>
+            </$set>
+        </$set>
+    </$set>
+</div>
+\end
+
+!!~TagLikeList macro
+
+This shows a field like the tags field is displayed in tiddler view mode.
+
+Usage: `<<TagLikeList fieldName label showEmpty wikify>>`
+
+|!Input |!Description |
+|fieldName |The name of the field to display as a tag field |
+|label |The label you wish to use with the displayed list. This label is wikified. |
+|showEmpty |If this is set to `True` than the label is shown even if the field is empty, otherwise the label is only displayed when the field isn't empty. Defaults to false. |
+|wikify |If this is set to `True` than the tags themselves are wikified. This defaults to `False`. |
+
+This Macro is used by `<<TagLikeList fieldName label>>` where `fieldName` is the name that contains what you want to list and `label` is the label you want to give it.
+
+Example `<<TagLikeList tags Tags>>`
+
+<<TagLikeList tags Tags>>
+
+!!~EditTagLikeList macro
+
+This is the editable version of the ~TagLikeList macro that shows the field contents like the tags field is shown in edit mode of a tiddler so you can add or remove items from the field.
+
+Usage: `<<EditTagLikeList fieldName label wikify>>`
+
+|!Input |!Description |
+|fieldName |The name of the field to display as a tag field |
+|label |The label you wish to use with the displayed list. This label is wikified. |
+|showEmpty |If this is set to `True` than the label is shown even if the field is empty, otherwise the label is only displayed when the field isn't empty. Defaults to false. |
+|wikify |If this is set to `True` than the tags themselves are wikified. This defaults to `False`. |
+
+This macro is ued by `<<EditTagLikeList fieldName label>>` where `fieldName`is the name of the field used.
+
+Example `<<EditTagLikeList tags Tags>>`:
+
+<<EditTagLikeList tags Tags>>

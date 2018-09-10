@@ -1,0 +1,234 @@
+caption: Alternate Tag Fields
+tags: $:/tags/ControlPanel
+title: $:/plugins/OokTech/GenTags/settings/AlternateTagFields
+plugin_configuration: Alternate Tag Fields
+
+!! General Settings
+
+* <$checkbox tiddler='$:/settings/GenTags/ShowOpenAll' field=text checked=true unchecked=false>Show `Open All` button in tag pills</$checkbox>
+* <$checkbox tiddler='$:/settings/GenTags/ShowNonExistent' field=text checked=true unchecked=false>Show fields before they are created</$checkbox>
+
+!!Use New Field:
+
+<table>
+    <tr>
+        <th>
+            Field Label
+        </th>
+        <th>
+            Field Name
+        </th>
+        <th>
+            Pill Color
+        </th>
+        <th>
+            Wikify Tags
+        </th>
+        <th>
+            Hide in edit mode
+        </th>
+        <th>
+          Hide nonexistent fields
+        </th>
+        <th>
+            Hide in view mode
+        </th>
+    </tr>
+    <tr>
+        <td>
+            <$edit-text
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field='label'
+                class='tc-edit-texteditor'
+            />
+        </td>
+        <td>
+            <$edit-text
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field='fieldname'
+                class='tc-edit-texteditor'
+            />
+        </td>
+        <td>
+            <$edit-text
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field=color
+            />
+            <$button>reset
+                <$action-setfield
+                    $tiddler='$:/temp/Settings/AlternateTagFields'
+                    $field=color
+                    $value=''
+                />
+            </$button>
+        </td>
+        <td>
+            <$checkbox
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field=wikify
+                checked=True
+                unchecked=False
+            >
+            </$checkbox>
+        </td>
+        <td>
+            <$checkbox
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field=hide_in_edit_mode
+                checked=true
+                unchecked=false
+            >
+            </$checkbox>
+        </td>
+        <td>
+          <$checkbox
+              tiddler='$:/temp/Settings/AlternateTagFields'
+              field=hide_nonexistent
+              checked=true
+              unchecked=false
+          >
+          </$checkbox>
+        </td>
+        <td>
+            <$checkbox
+                tiddler='$:/temp/Settings/AlternateTagFields'
+                field=hide_in_view_mode
+                checked=true
+                unchecked=false
+            >
+            </$checkbox>
+        </td>
+    </tr>
+</table>
+
+<$list
+    filter='[[$:/temp/Settings/AlternateTagFields]has[fieldname]get[fieldname]limit[1]] -title -text
+tags -created -modified -tags'
+    emptyMessage="Enter a field name. Valid field names contain only letters, numbers, `.`, `-`, and `-`. Additionally you may not use the names `title`, `text`, `tags`, `created` or `modified`."
+>
+    <$set
+        name=SettingsTiddlerName
+        filter='[{$:/temp/Settings/AlternateTagFields!!fieldname}addprefix[$:/settings/AlternateTagFields/]]'
+    >
+        <$button>Add Field
+            <$action-setfield
+                $tiddler=<<SettingsTiddlerName>>
+                fieldname={{$:/temp/Settings/AlternateTagFields!!fieldname}}
+                label={{$:/temp/Settings/AlternateTagFields!!label}}
+                hide_in_view_mode={{$:/temp/Settings/AlternateTagFields!!hide_in_view_mode}}
+                hide_in_edit_mode={{$:/temp/Settings/AlternateTagFields!!hide_in_edit_mode}}
+                hide_nonexistent={{$:/temp/Settings/AlternateTagFields!!hide_nonexistent}}
+                wikify={{$:/temp/Settings/AlternateTagFields!!wikify}}
+            />
+            <$action-setfield
+                $tiddler='$:/temp/Settings/AlternateTagFields'
+                fieldname=''
+                label=''
+                hide_in_view_mode=''
+                hide_in_edit_mode=''
+                wikify=''
+            />
+        </$button>
+    </$set>
+</$list>
+
+!!Additional fields currently in use:
+
+<table>
+    <tr>
+        <th>
+            Field Label
+        </th>
+        <th>
+            Field Name
+        </th>
+        <th>
+            Pill Color
+        </th>
+        <th>
+            Wikify Tags
+        </th>
+        <th>
+            Hide in edit mode
+        </th>
+        <th>
+          Hide nonexistent fields
+        </th>
+        <th>
+            Hide in view mode
+        </th>
+        <th>
+            Remove Field
+        </th>
+    </tr>
+
+<$list
+    filter='[prefix[$:/settings/AlternateTagFields/]]'
+>
+    <tr>
+        <td>
+            <$edit-text
+                field=label
+                class='tc-edit-texteditor'
+            />
+        </td>
+        <td>
+            <$edit-text
+                field=fieldname
+                class='tc-edit-texteditor'
+            />
+        </td>
+        <td>
+            <$edit-text
+                field=color
+            />
+            <$button>reset
+                <$action-setfield
+                    $field=color
+                    $value=''
+                />
+            </$button>
+        </td>
+        <td>
+            <$checkbox
+                field=wikify
+                checked=True
+                unchecked=False
+            >
+            </$checkbox>
+        </td>
+        <td>
+            <$checkbox
+                field=hide_in_edit_mode
+                checked=true
+                unchecked=false
+            >
+            </$checkbox>
+        </td>
+        <td>
+          <$checkbox
+              field=hide_nonexistent
+              checked=true
+              unchecked=false
+          >
+          </$checkbox>
+        </td>
+        <td>
+            <$checkbox
+                field=hide_in_view_mode
+                checked=true
+                unchecked=false
+            >
+            </$checkbox>
+        </td>
+        <td>
+            <$button class='tc-btn-invisible'>{{$:/core/images/delete-button}}
+                <$action-deletetiddler
+                    $tiddler=<<currentTiddler>>
+                />
+            </$button>
+        </td>
+    </tr>
+</$list>
+
+</table>

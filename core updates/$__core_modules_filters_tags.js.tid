@@ -1,0 +1,47 @@
+module-type: filteroperator
+title: $:/core/modules/filters/tags.js
+type: application/javascript
+
+/*\
+title: $:/core/modules/filters/tags.js
+type: application/javascript
+module-type: filteroperator
+
+Filter operator returning all the tags of the selected tiddlers
+
+\*/
+(function(){
+
+/*jslint node: true, browser: true */
+/*global $tw: false */
+"use strict";
+
+/*
+Export our filter function
+*/
+exports.tags = function(source,operator,options) {
+	var tags = {};
+	var otherArray = {};
+	var field = (operator.suffix) ? operator.suffix:'tags';
+	source(function(tiddler,title) {
+		var t, length;
+		if (field === 'tags') {
+			if(tiddler && tiddler.fields.tags) {
+				for(t=0, length=tiddler.fields.tags.length; t<length; t++) {
+					tags[tiddler.fields.tags[t]] = true;
+				}
+			}
+		} else {
+			if (tiddler && tiddler.fields[operator.suffix]) {
+				otherArray = $tw.utils.parseStringArray(tiddler.fields[operator.suffix]);
+				for (t=0, length=otherArray.length; t<length; t++) {
+					tags[otherArray[t]] = true;
+				}
+			}
+		}
+	});
+
+	return Object.keys(tags);
+};
+
+})();

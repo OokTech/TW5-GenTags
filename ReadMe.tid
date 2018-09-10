@@ -1,0 +1,61 @@
+title: $:/plugins/OokTech/GenTags/ReadMe
+
+This plugin lets you use multiple fields the same way you use the tags field. These fields are independent, so if you have `foo` in the normal tags field in one tiddler and `foo` in another field in another tiddler, the filter `[tags[foo]]` will only return the tiddler with `foo` in the tags field.
+
+!!Basic Usage
+
+There is a settings tab in the $:/ControlPanel where you can set which fields are treated like tags for all tiddlers.
+
+To add a new tag field go to the tab in the $:/ControlPanel and enter a new field name and label and set the other options. The field name must follow the normal field name rules (only numbers, lower case letters . - and _ allowed. No spaces.) The label can be any string you wish. The pill color is the default pill color for tags in that field. By default all the fields will use the same yellow as the default tag color (this is changed by changing the palette), but if you want all tags in your tag-like field to be a different color you can set that color when you define the field. If you want the tag pills to use the default tag color click on reset to clear the field. Note that there is a bug where the color selector will show black if the field is empty.
+The `Wikify Tags` option is new. If you select that than you can put something like `{{$:/core/images/save-button}}` as a tag and it will display as {{$:/core/images/save-button}}. The options `Hide in Edit Mode` and `Hide in View Mode` hide the tag list in view mode and the interface for adding/removing tags in edit mode for that field. These are useful if you want to use the macros described below to create your own interface or display.
+
+Once you have configured the settings click on the add field button to add the field to the list of tag fields. Note that this doesn't create any fields. It creates a tiddler with the configuration for the field, but it doesn't modify any other tiddlers. When the configuration tiddler exists for a field than the tags interface can be seen in view and edit mode (unless it is hidden).
+
+Once you have some tag fields listed there will be a table listing the fields and letting you change the options for each field. The options are the same as when adding a field but there will also be a `Remove Field` option. Clicking on this will remove the settings tiddler and the field will no longer be used like a tags field. Note that this doesn't affect any tiddlers other than the settings tiddler, so if you have added tags in the field `demo` and then use this interface and click `Remove Field` the 'demo' fields in all of your tiddlers are unaffected, it is only the interface that changes.
+
+After adding a tag field, if you edit a tiddler you should see the interface for editing tags in that field under the interface for editing the normal tags field. Adding and removing tags works the same way in all fields.
+
+!!Filter Operators
+
+Tags have three filter operators associated with them, `tags`, `tagging` and `tag`. This section explains how to use them (or alternatives) with this plugin.
+
+`tags` - This plugin extends the tags filter operator so you can now specify which field to look in. Normally `<$list filter='[tags[]]'/>` will give you a list of all tags in the tags field of all tiddlers. If you use `<$list filter='[tags:demo[]]'/>` it will give you all tags in the demo field of all tiddlers. Otherwise the behaviour is identical.
+
+`tagging` - This operator returns a list of tiddlers that have the input tag (or tags) in their `tags` field. You can get this same behaviour for the alternate tag fields you make with this plugin by using a filter like `<$list filter='[[TagName]listed[new_tag_field]]'/>`, which will list all the tiddlers that have the tag `TagName` in the field `new_tag_field`.
+
+`tag` - ''There isn't an exact equavilent for this operator yet! But you can use the alternative for tagging is almost every situation.'' This operator returns a list of tiddlers that have the input tag in their `tags` field. It is almost identical to tagging with two important distinctions:
+
+*`tag` can only use a singe tag
+*you can negate this operator but not tagging
+
+!!More Advanced Usage
+
+If you wish you can use the macros in [[$:/plugins/OokTech/GenTags/ListLikeTagsMacro]] to add a list of tags anywhere you wish without affecting all tiddlers. See the macro tiddler for more information.
+
+!!Feature List
+
+*Use any field like the tags field (with some differences noted below)
+*Set a field to be used like a tag field globally
+*Add and remove items from a field used like a tag field in the same way you add or remove tags from the tags field
+*Show/hide a globally used tag-like field in view mode (it is displayed the same way as tags are, complete with the tag pills and the drop-down list)
+*Show/hide the tag interface for each field used as a global tag-like field
+*Use the macro [[TagLikeList|$:/plugins/OokTech/GenTags/ListLikeTagsMacro]] to show a list field like it were tags in any tiddler
+*Use the macro [[EditTagLikeList|$:/plugins/OokTech/GenTags/ListLikeTagsMacro]] to show the add/remove tags interface for any field in any tiddler
+*Set the background color for tags in each field
+*Set the background color for individual tags (unfortunately the same color is used regardless of the field it is in for individual tags. So if you set the color for the tag `foo` to green, and then put `foo` in another tag-like field it will be green there also. I am looking into it.)
+*Field labels can be text, icons or images. (The name and the label aren't the same thing. The name is something like `demo` the label is what is displayed next to the list of things in the field in view and edit mode.
+*Tags can also be text, icons or images. Go to the settings tab in the $:/ControlPanel and under the configuration for the field there is a checkbox `Wikify Tags`. If you check this box than whatever you put in for the tag will be wikified before it is displayed. So you can use just icons for a tag if you wish.
+*The tags[] filter operator can now take a suffix, so [tags:demo[]] will list the demo field as though it were a tags field.
+
+!!Bugs and Road Map
+
+*FIND A BETTER NAME! Generic Tags (GenTags?) Tags-in-limbo (tails?)Tags In Other Fields Without A Good Name (TIOFWAGN?) Fields Have Tags And Great Names (FHTAGN?) Could Tags Have Ulterior Labels Hidden from Us (CTHULHU?) semantic tags or s-tags?
+*The drop down selectior in edit mode doesn't have the correct colors for the other fields
+*Find a way to let the custom tag colors be per field, so you can have `foo` in separate custom colors in `tags` and `demo`. Or just a custom color in `tags` and the default color for `demo`.
+*Add an option to toggle the visiblity of the label without affecting anything else
+*Add an option to have some alternative to the tag pills for display.
+*I may add an optional description for the fields. This description would appear when you click or hover over the label next to the list of things in the field.
+*Currently if you have the same tag in multiple fields and click on the tag for the drop-down list the list will appear for the tag in each field where it is in the current tiddler.
+*For fields used as global alternative tag fields add an option to hide the field in edit mode so you only see the tag interface for it. (Requires some changes to the core)
+*I need to add better handling for when a normal tags field exists so they are all consistent (Requires some changes to the core)
+*Figure out if we should update any other filter operators (tagging, tag, others?) so that they work with the new fields as expected. (Requires some changes to the core)

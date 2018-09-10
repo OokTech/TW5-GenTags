@@ -1,0 +1,10 @@
+{
+  "title": "$:/plugins/OokTech/GenTags",
+  "description": "A plugin to let any field be used like the tags field",
+  "author": "OokTech",
+  "version": "0.0.24",
+  "core-version": ">=5.1.0",
+  "source": "",
+  "plugin-type": "plugin",
+  "list": "ReadMe ListLikeTagsMacro Acknowledgements"
+}

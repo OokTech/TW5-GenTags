@@ -1,0 +1,18 @@
+title: $:/plugin/OokTech/GenTags/gentag-link
+tags:
+
+<$set
+  name="backgroundColor"
+  filter="[[$:/settings/AlternateTagFields/]addsuffix<FieldName>get[color]][{!!color}] +[limit[1]]"
+select=0
+>
+  <span
+    style=<<tag-styles>>
+    class="tc-tag-label"
+  >
+    <$view
+      field="title"
+      format="plainwikified"
+    />
+  </span>
+</$set>

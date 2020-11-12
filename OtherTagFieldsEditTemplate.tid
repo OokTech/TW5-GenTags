@@ -7,29 +7,29 @@ title: $:/plugins/OokTech/GenTags/template/EditTemplate/OtherTagFieldsEditTempla
   variable=SettingsTiddler
 >
   <$set
-    name=FieldName
-    filter='[<SettingsTiddler>get[fieldname]]'
+  name=FieldName
+  filter='[<SettingsTiddler>get[fieldname]]'
   >
-    <$list
-      filter='[<SettingsTiddler>!hide_nonexistent[true]][<currentTiddler>fields[]prefix<FieldName>suffix<FieldName>]+[limit[1]]'
-      variable=dummy
+  <$list
+    filter='[<SettingsTiddler>!hide_nonexistent[true]][<currentTiddler>fields[]prefix<FieldName>suffix<FieldName>]+[limit[1]]'
+    variable=dummy
+  >
+    <$set
+    name=Wikify
+    filter='[<SettingsTiddler>get[wikify]]'
     >
-      <$set
-        name=Wikify
-        filter='[<SettingsTiddler>get[wikify]]'
-      >
-        <$set
-          name=Label
-          filter='[<SettingsTiddler>get[label]]'
-        >
-          <$macrocall
-            $name=EditTagLikeList
-            fieldName=<<FieldName>>
-            label=<<Label>>
-            wikify=<<Wikify>>
-          />
-        </$set>
-      </$set>
-    </$list>
+    <$set
+      name=Label
+      filter='[<SettingsTiddler>get[label]]'
+    >
+      <$macrocall
+        $name=EditTagLikeList
+        fieldName=<<FieldName>>
+        label=<<Label>>
+        wikify=<<Wikify>>
+      />
+    </$set>
+    </$set>
+  </$list>
   </$set>
 </$list>

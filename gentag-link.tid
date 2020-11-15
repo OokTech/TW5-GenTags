@@ -4,15 +4,15 @@ tags:
 <$set
   name="backgroundColor"
   filter="[[$:/settings/AlternateTagFields/]addsuffix<FieldName>get[color]][{!!color}] +[limit[1]]"
-select=0
+  select=0
 >
   <span
     style=<<tag-styles>>
-    class="tc-tag-label"
+    class="tc-tag-label tc-menu-list-item"
   >
     <$view
       field="title"
       format="plainwikified"
     />
   </span>
-</$set>
+</$set><br>

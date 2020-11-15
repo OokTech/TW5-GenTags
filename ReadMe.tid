@@ -17,16 +17,15 @@ After adding a tag field, if you edit a tiddler you should see the interface for
 
 !!Filter Operators
 
-Tags have three filter operators associated with them, `tags`, `tagging` and `tag`. This section explains how to use them (or alternatives) with this plugin.
+Tags have four filter operators associated with them, `tags`, `tagging`, `untagged` and `tag`. This section explains how to use them (or alternatives) with this plugin.
 
 `tags` - This plugin extends the tags filter operator so you can now specify which field to look in. Normally `<$list filter='[tags[]]'/>` will give you a list of all tags in the tags field of all tiddlers. If you use `<$list filter='[tags:demo[]]'/>` it will give you all tags in the demo field of all tiddlers. Otherwise the behaviour is identical.
 
 `tagging` - This operator returns a list of tiddlers that have the input tag (or tags) in their `tags` field. You can get this same behaviour for the alternate tag fields you make with this plugin by using a filter like `<$list filter='[[TagName]listed[new_tag_field]]'/>`, which will list all the tiddlers that have the tag `TagName` in the field `new_tag_field`.
 
-`tag` - ''There isn't an exact equavilent for this operator yet! But you can use the alternative for tagging is almost every situation.'' This operator returns a list of tiddlers that have the input tag in their `tags` field. It is almost identical to tagging with two important distinctions:
+`tag` - This operator returns a list of tiddlers that have the input tag in their `tags` field. The equivalent to `tag[tagname]` for the alternate field `fieldname` is `contains:fieldname[tagname]`
 
-*`tag` can only use a singe tag
-*you can negate this operator but not tagging
+`untagged` - This operator returns an input tiddler if it has no tags. The equivalent is `has[fieldname]`
 
 !!More Advanced Usage
 
@@ -50,12 +49,10 @@ If you wish you can use the macros in [[$:/plugins/OokTech/GenTags/ListLikeTagsM
 !!Bugs and Road Map
 
 *FIND A BETTER NAME! Generic Tags (GenTags?) Tags-in-limbo (tails?)Tags In Other Fields Without A Good Name (TIOFWAGN?) Fields Have Tags And Great Names (FHTAGN?) Could Tags Have Ulterior Labels Hidden from Us (CTHULHU?) semantic tags or s-tags?
-*The drop down selectior in edit mode doesn't have the correct colors for the other fields
 *Find a way to let the custom tag colors be per field, so you can have `foo` in separate custom colors in `tags` and `demo`. Or just a custom color in `tags` and the default color for `demo`.
 *Add an option to toggle the visiblity of the label without affecting anything else
 *Add an option to have some alternative to the tag pills for display.
 *I may add an optional description for the fields. This description would appear when you click or hover over the label next to the list of things in the field.
-*Currently if you have the same tag in multiple fields and click on the tag for the drop-down list the list will appear for the tag in each field where it is in the current tiddler.
 *For fields used as global alternative tag fields add an option to hide the field in edit mode so you only see the tag interface for it. (Requires some changes to the core)
 *I need to add better handling for when a normal tags field exists so they are all consistent (Requires some changes to the core)
 *Figure out if we should update any other filter operators (tagging, tag, others?) so that they work with the new fields as expected. (Requires some changes to the core)

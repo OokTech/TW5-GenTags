@@ -1,0 +1,43 @@
+{
+    "directories": [
+        {
+            "path": "./core updates",
+            "filesRegExp": ".tid",
+            "isTiddlerFile": true
+        },
+        {
+            "path": "./OokTechInfo",
+            "filesRegExp": ".tid",
+            "isTiddlerFile": true
+        }
+    ],
+    "tiddlers": [
+        {
+            "file": "./AlternateTagFields.tid",
+            "isTiddlerFile": true
+        },
+        {
+            "file": "./gentag-link.tid",
+            "isTiddlerFile": true
+        },
+        {
+            "file": "./LikeTagPills.tid",
+            "isTiddlerFile": true
+        },{
+            "file": "./ListLikeTagsMacro.tid",
+            "isTiddlerFile": true
+        },
+        {
+            "file": "./OtherTagFieldsEditTemplate.tid",
+            "isTiddlerFile": true
+        },
+        {
+            "file": "./OtherTagFieldsViewTemplate.tid",
+            "isTiddlerFile": true
+        },
+        {
+            "file": "./ReadMe.tid",
+            "isTiddlerFile": true
+        }
+    ]
+}

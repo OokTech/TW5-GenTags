@@ -9,26 +9,21 @@ background-color:$(backgroundColor)$;
 \end
 \define TagLikeList(fieldName label showEmpty:"" wikify:"False")
 <div>
-  <$set
-    name=WikifyTags
-    value=<<__wikify__>>
+  <$list
+    filter='[list[!!$fieldName$]] [<__showEmpty__>lowercase[]match[true]] +[limit[1]]'
   >
+    $label$:
+  </$list>
+	<$vars
+		WikifyTags=<<__wikify__>>
+		TheField=<<__fieldName__>>
+	>
     <$list
-      filter='[list[!!$fieldName$]] [<__showEmpty__>lowercase[]match[true]] +[limit[1]]'
+      filter='[list[!!$fieldName$]]'
     >
-      $label$:
+      {{||$:/plugins/OokTech/GenTags/LikeTagPills}}
     </$list>
-    <$set
-      name=TheField
-      value=<<__fieldName__>>
-    >
-      <$list
-        filter='[list[!!$fieldName$]]'
-      >
-        {{||$:/plugins/OokTech/GenTags/LikeTagPills}}
-      </$list>
-    </$set>
-  </$set>
+  </$vars>
 </div>
 \end
 
@@ -43,6 +38,7 @@ background-color:$(backgroundColor)$;
     <$vars
       ContainingTiddler={{!!title}}
       WikifyTags=<<__wikify__>>
+			FieldName=<<__fieldName__>>
     >
 
         $label$:
@@ -53,6 +49,7 @@ background-color:$(backgroundColor)$;
           <$set
             name=TempPopupState
             filter="[<__fieldName__>addprefix[$:/state/popup/tags-auto-complete/]addsuffix<currentTiddler>]"
+						select=0
           >
             <$set
               name=DefaultBackgroundColor
@@ -131,49 +128,46 @@ background-color:$(backgroundColor)$;
                     </$button>
                   </$set>
                 </span>
-              </div>
-              <div
-                class="tc-block-dropdown-wrapper"
-              >
-                <$reveal
-                  state=<<TempPopupState>>
-                  type="nomatch"
-                  text=""
-                  default=""
-                >
-                  <div
-                    class="tc-block-dropdown"
-                  >
-										<$list
-											filter="""[<currentTiddler>tags:$fieldName$[]]"""
-										>
-											<$set name=FieldName value=<<__fieldName__>>>
-												{{||$:/plugin/OokTech/GenTags/gentag-link}}
-											</$set>
-											<br>
-										</$list>
-										<hr>
-                    <$list
-                      filter="""[tags:$fieldName$[]] -[<currentTiddler>tags:$fieldName$[]] +[addprefix<opening>addsuffix<closing>]"""
-                    >
-                      <$button
-                        set=<<TempTiddlerName>>
-                        setTo=""
-                        class="tc-btn-invisible"
-                      >
-												<$set name=FieldName value=<<__fieldName__>>>
-                        	{{||$:/plugin/OokTech/GenTags/gentag-link}}
-												</$set>
-                        <$action-listops
-                          $tiddler=<<ContainingTiddler>>
-                          $field=<<__fieldName__>>
-                          $subfilter='+[append<currentTiddler>]'
-                        />
-                      </$button>
-                      <br>
-                    </$list>
-                  </div>
-                </$reveal>
+								<div
+	                class="tc-block-dropdown-wrapper"
+	              >
+	                <$reveal
+	                  state=<<TempPopupState>>
+	                  type="nomatch"
+	                  text=""
+	                  default=""
+	                >
+	                  <div
+	                    class="tc-block-dropdown"
+	                  >
+											<$list
+												filter="""[<currentTiddler>tags:$fieldName$[]]"""
+												template="$:/plugin/OokTech/GenTags/gentag-link"
+											/>
+											<hr>
+											<div
+												class="tc-tags-wrapper"
+											>
+		                    <$list
+		                     filter="""[tags:$fieldName$[]] -[<currentTiddler>tags:$fieldName$[]] +[addprefix<opening>addsuffix<closing>]"""
+		                    >
+		                      <$button
+		                        set=<<TempTiddlerName>>
+		                        setTo=""
+		                        class="tc-btn-invisible tc-menu-list-item"
+		                      >
+		                        {{||$:/plugin/OokTech/GenTags/gentag-link}}
+		                        <$action-listops
+		                          $tiddler=<<ContainingTiddler>>
+		                          $field=<<__fieldName__>>
+		                          $subfilter='+[append<currentTiddler>]'
+		                        />
+		                      </$button><br>
+		                    </$list>
+											</div>
+	                  </div>
+	                </$reveal>
+	              </div>
               </div>
             </$set>
           </$set>

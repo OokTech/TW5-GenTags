@@ -47,7 +47,7 @@ color:$(foregroundColor)$;
       >
         <$list
           filter='[<WikifyTags>lowercase[]match[true]]'
-          variable=dummy
+          variable=unused
           emptyMessage="""<$transclude tiddler="$:/core/ui/ListItemTemplate"/>"""
         >
           {{!!title}}
